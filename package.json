@@ -1,0 +1,32 @@
+{
+  "name": "rotate-resize-image",
+  "version": "1.0.0",
+  "description": "Lightweight client-side image resize, rotation, and compression utility",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "image",
+    "resize",
+    "compression",
+    "canvas",
+    "browser",
+    "rotation",
+    "typescript"
+  ],
+  "author": "Gunmeet Singh",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GunmeetS/rotate-resize-image.git"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
