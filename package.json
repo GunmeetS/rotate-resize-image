@@ -1,6 +1,6 @@
 {
   "name": "rotate-resize-image",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Lightweight client-side image resize, rotation, and compression utility",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
