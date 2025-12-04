@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>rotate-resize-image - Interactive Demo</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 40px;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+
+    .nav-links {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .nav-links a {
+      display: inline-block;
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      margin: 0 10px;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+
+    .nav-links a:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .demo-section {
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .demo-section h2 {
+      color: #333;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+      border-bottom: 2px solid #667eea;
+      padding-bottom: 10px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #e0e0e0;
+      flex-wrap: wrap;
+    }
+
+    .tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: #666;
+      font-weight: 600;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s;
+    }
+
+    .tab:hover {
+      color: #667eea;
+    }
+
+    .tab.active {
+      color: #667eea;
+      border-bottom-color: #667eea;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .feature-card {
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 20px;
+      background: #f9f9f9;
+    }
+
+    .feature-card h3 {
+      color: #667eea;
+      margin-bottom: 15px;
+      font-size: 1.2rem;
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: #555;
+      font-size: 14px;
+    }
+
+    input[type="file"] {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      border: 2px dashed #667eea;
+      border-radius: 6px;
+      cursor: pointer;
+      background: white;
+      font-size: 14px;
+    }
+
+    input[type="number"],
+    input[type="range"],
+    select {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #e0e0e0;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    input[type="range"] {
+      padding: 0;
+      height: 30px;
+    }
+
+    .range-value {
+      display: inline-block;
+      margin-left: 10px;
+      font-weight: bold;
+      color: #667eea;
+      font-size: 14px;
+    }
+
+    button {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: background 0.3s;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background: #5568d3;
+    }
+
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .preview-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .preview-box {
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 15px;
+      background: #f9f9f9;
+    }
+
+    .preview-box h4 {
+      margin-bottom: 10px;
+      color: #333;
+      font-size: 1rem;
+    }
+
+    .preview-box img {
+      width: 100%;
+      height: auto;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      max-height: 400px;
+      object-fit: contain;
+      background: #f0f0f0;
+    }
+
+    .info-box {
+      background: #e8f0fe;
+      border-left: 4px solid #667eea;
+      padding: 12px;
+      border-radius: 4px;
+      margin-top: 10px;
+      font-size: 13px;
+    }
+
+    .info-box p {
+      margin: 5px 0;
+    }
+
+    .success {
+      background: #d4edda;
+      border-left-color: #28a745;
+      color: #155724;
+    }
+
+    .error {
+      background: #f8d7da;
+      border-left-color: #dc3545;
+      color: #721c24;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #667eea;
+      font-weight: 600;
+    }
+
+    .download-btn {
+      background: #28a745;
+      margin-top: 10px;
+    }
+
+    .download-btn:hover {
+      background: #218838;
+    }
+
+    .quick-rotate-btns {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .quick-rotate-btns button {
+      width: auto;
+      padding: 8px 16px;
+      margin: 0;
+      font-size: 14px;
+      flex: 1;
+      min-width: 80px;
+    }
+
+    .batch-results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 1.8rem;
+      }
+
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .quick-rotate-btns button {
+        min-width: 60px;
+        padding: 8px 12px;
+        font-size: 13px;
+      }
+    }
+
+    .stat-badge {
+      display: inline-block;
+      padding: 5px 10px;
+      background: #667eea;
+      color: white;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-right: 5px;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🔄 rotate-resize-image</h1>
+      <p>Interactive Demo - Test All Features</p>
+    </div>
+
+    <div class="nav-links">
+      <a href="index.html">🏠 Home</a>
+      <a href="examples.html">💻 Code Examples</a>
+      <a href="https://github.com/GunmeetS/rotate-resize-image" target="_blank">⭐ GitHub</a>
+      <a href="https://www.npmjs.com/package/rotate-resize-image" target="_blank">📦 npm</a>
+    </div>
+
+    <div class="demo-section">
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('basic')">Basic Resize</button>
+        <button class="tab" onclick="switchTab('rotation')">Rotation</button>
+        <button class="tab" onclick="switchTab('compression')">Target Size</button>
+        <button class="tab" onclick="switchTab('formats')">Formats</button>
+        <button class="tab" onclick="switchTab('batch')">Batch Processing</button>
+      </div>
+
+      <!-- Tab 1: Basic Resize -->
+      <div id="basic" class="tab-content active">
+        <h2>📐 Basic Resize with Aspect Ratio</h2>
+        <p style="color: #666; margin-bottom: 20px;">Resize images while maintaining their aspect ratio. The image will fit within the specified dimensions.</p>
+        
+        <div class="feature-grid">
+          <div class="feature-card">
+            <h3>⚙️ Configuration</h3>
+            <div class="input-group">
+              <label>📁 Select Image</label>
+              <input type="file" id="basicFile" accept="image/*">
+            </div>
+            <div class="input-group">
+              <label>Width: <span class="range-value" id="basicWidthValue">800</span>px</label>
+              <input type="range" id="basicWidth" min="100" max="4000" value="800" 
+                     oninput="document.getElementById('basicWidthValue').textContent = this.value">
+            </div>
+            <div class="input-group">
+              <label>Height: <span class="range-value" id="basicHeightValue">600</span>px</label>
+              <input type="range" id="basicHeight" min="100" max="4000" value="600"
+                     oninput="document.getElementById('basicHeightValue').textContent = this.value">
+            </div>
+            <div class="input-group">
+              <label>Quality: <span class="range-value" id="basicQualityValue">0.9</span></label>
+              <input type="range" id="basicQuality" min="0.1" max="1" step="0.1" value="0.9" 
+                     oninput="document.getElementById('basicQualityValue').textContent = this.value">
+            </div>
+            <button onclick="testBasicResize()">✨ Resize Image</button>
+          </div>
+
+          <div class="preview-box">
+            <h4>📷 Original Image</h4>
+            <img id="basicOriginal" style="display:none;" alt="Original">
+            <div id="basicOriginalInfo" class="info-box" style="display:none;"></div>
+          </div>
+
+          <div class="preview-box">
+            <h4>🎨 Resized Result</h4>
+            <img id="basicResult" style="display:none;" alt="Result">
+            <div id="basicResultInfo" class="info-box" style="display:none;"></div>
+            <button id="basicDownload" class="download-btn" style="display:none;" onclick="downloadImage('basicResult', 'resized-image.jpg')">⬇️ Download</button>
+          </div>
+        </div>
+        <div id="basicLoading" class="loading" style="display:none;">⏳ Processing...</div>
+        <div id="basicError" class="info-box error" style="display:none;"></div>
+      </div>
+
+      <!-- Tab 2: Rotation -->
+      <div id="rotation" class="tab-content">
+        <h2>🔄 Image Rotation</h2>
+        <p style="color: #666; margin-bottom: 20px;">Rotate images by any degree (90°, 180°, 270°, or custom angles) while resizing.</p>
+        
+        <div class="feature-grid">
+          <div class="feature-card">
+            <h3>⚙️ Configuration</h3>
+            <div class="input-group">
+              <label>📁 Select Image</label>
+              <input type="file" id="rotateFile" accept="image/*">
+            </div>
+            <div class="input-group">
+              <label>Rotation: <span class="range-value" id="rotateDegreesValue">0</span>°</label>
+              <input type="range" id="rotateDegrees" min="0" max="360" step="15" value="0" 
+                     oninput="document.getElementById('rotateDegreesValue').textContent = this.value">
+            </div>
+            <div class="quick-rotate-btns">
+              <button onclick="quickRotate(90)">↻ 90°</button>
+              <button onclick="quickRotate(180)">↻ 180°</button>
+              <button onclick="quickRotate(270)">↻ 270°</button>
+              <button onclick="quickRotate(0)">↻ 0°</button>
+            </div>
+            <div class="input-group">
+              <label>Width: <span class="range-value" id="rotateWidthValue">800</span>px</label>
+              <input type="range" id="rotateWidth" min="100" max="4000" value="800"
+                     oninput="document.getElementById('rotateWidthValue').textContent = this.value">
+            </div>
+            <div class="input-group">
+              <label>Height: <span class="range-value" id="rotateHeightValue">600</span>px</label>
+              <input type="range" id="rotateHeight" min="100" max="4000" value="600"
+                     oninput="document.getElementById('rotateHeightValue').textContent = this.value">
+            </div>
+            <button onclick="testRotation()">🔄 Rotate & Resize</button>
+          </div>
+
+          <div class="preview-box">
+            <h4>📷 Original</h4>
+            <img id="rotateOriginal" style="display:none;" alt="Original">
+          </div>
+
+          <div class="preview-box">
+            <h4>🔄 Rotated Result</h4>
+            <img id="rotateResult" style="display:none;" alt="Rotated">
+            <div id="rotateResultInfo" class="info-box" style="display:none;"></div>
+            <button id="rotateDownload" class="download-btn" style="display:none;" onclick="downloadImage('rotateResult', 'rotated-image.jpg')">⬇️ Download</button>
+          </div>
+        </div>
+        <div id="rotateLoading" class="loading" style="display:none;">⏳ Processing...</div>
+        <div id="rotateError" class="info-box error" style="display:none;"></div>
+      </div>
+
+      <!-- Tab 3: Target Size Compression -->
+      <div id="compression" class="tab-content">
+        <h2>🗜️ Compress to Target File Size</h2>
+        <p style="color: #666; margin-bottom: 20px;">Automatically compress images to meet a specific file size target using binary search algorithm.</p>
+        
+        <div class="feature-grid">
+          <div class="feature-card">
+            <h3>⚙️ Configuration</h3>
+            <div class="input-group">
+              <label>📁 Select Image</label>
+              <input type="file" id="compressFile" accept="image/*">
+            </div>
+            <div class="input-group">
+              <label>Target Size: <span class="range-value" id="targetSizeValue">100</span>KB</label>
+              <input type="range" id="targetSize" min="10" max="500" value="100"
+                     oninput="document.getElementById('targetSizeValue').textContent = this.value">
+            </div>
+            <div class="input-group">
+              <label>Max Width: <span class="range-value" id="compressWidthValue">1920</span>px</label>
+              <input type="range" id="compressWidth" min="100" max="4000" value="1920"
+                     oninput="document.getElementById('compressWidthValue').textContent = this.value">
+            </div>
+            <div class="input-group">
+              <label>Max Height: <span class="range-value" id="compressHeightValue">1080</span>px</label>
+              <input type="range" id="compressHeight" min="100" max="4000" value="1080"
+                     oninput="document.getElementById('compressHeightValue').textContent = this.value">
+            </div>
+            <button onclick="testCompression()">🗜️ Compress to Target</button>
+          </div>
+
+          <div class="preview-box">
+            <h4>📷 Original</h4>
+            <img id="compressOriginal" style="display:none;" alt="Original">
+            <div id="compressOriginalInfo" class="info-box" style="display:none;"></div>
+          </div>
+
+          <div class="preview-box">
+            <h4>🗜️ Compressed Result</h4>
+            <img id="compressResult" style="display:none;" alt="Compressed">
+            <div id="compressResultInfo" class="info-box success" style="display:none;"></div>
+            <button id="compressDownload" class="download-btn" style="display:none;" onclick="downloadImage('compressResult', 'compressed-image.jpg')">⬇️ Download</button>
+          </div>
+        </div>
+        <div id="compressLoading" class="loading" style="display:none;">⏳ Compressing...</div>
+        <div id="compressError" class="info-box error" style="display:none;"></div>
+      </div>
+
+      <!-- Tab 4: Format Conversion -->
+      <div id="formats" class="tab-content">
+        <h2>🎨 Format Conversion</h2>
+        <p style="color: #666; margin-bottom: 20px;">Convert images between JPEG, PNG, and WebP formats while resizing.</p>
+        
+        <div class="feature-grid">
+          <div class="feature-card">
+            <h3>⚙️ Configuration</h3>
+            <div class="input-group">
+              <label>📁 Select Image</label>
+              <input type="file" id="formatFile" accept="image/*">
+            </div>
+            <div class="input-group">
+              <label>Output Format</label>
+              <select id="outputFormat">
+                <option value="image/jpeg">JPEG (Best for photos)</option>
+                <option value="image/png">PNG (Best for graphics)</option>
+                <option value="image/webp">WebP (Best compression)</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label>Width: <span class="range-value" id="formatWidthValue">1024</span>px</label>
+              <input type="range" id="formatWidth" min="100" max="4000" value="1024"
+                     oninput="document.getElementById('formatWidthValue').textContent = this.value">
+            </div>
+            <div class="input-group">
+              <label>Height: <span class="range-value" id="formatHeightValue">768</span>px</label>
+              <input type="range" id="formatHeight" min="100" max="4000" value="768"
+                     oninput="document.getElementById('formatHeightValue').textContent = this.value">
+            </div>
+            <div class="input-group">
+              <label>Quality: <span class="range-value" id="formatQualityValue">0.85</span></label>
+              <input type="range" id="formatQuality" min="0.1" max="1" step="0.05" value="0.85" 
+                     oninput="document.getElementById('formatQualityValue').textContent = this.value">
+            </div>
+            <button onclick="testFormatConversion()">🎨 Convert Format</button>
+          </div>
+
+          <div class="preview-box">
+            <h4>📷 Original</h4>
+            <img id="formatOriginal" style="display:none;" alt="Original">
+            <div id="formatOriginalInfo" class="info-box" style="display:none;"></div>
+          </div>
+
+          <div class="preview-box">
+            <h4>🎨 Converted Result</h4>
+            <img id="formatResult" style="display:none;" alt="Converted">
+            <div id="formatResultInfo" class="info-box" style="display:none;"></div>
+            <button id="formatDownload" class="download-btn" style="display:none;" onclick="downloadImage('formatResult', 'converted-image')">⬇️ Download</button>
+          </div>
+        </div>
+        <div id="formatLoading" class="loading" style="display:none;">⏳ Converting...</div>
+        <div id="formatError" class="info-box error" style="display:none;"></div>
+      </div>
+
+      <!-- Tab 5: Batch Processing -->
+      <div id="batch" class="tab-content">
+        <h2>📦 Batch Processing</h2>
+        <p style="color: #666; margin-bottom: 20px;">Process multiple images at once with the same settings. Perfect for bulk image optimization.</p>
+        
+        <div class="feature-card">
+          <h3>⚙️ Configuration</h3>
+          <div class="input-group">
+            <label>📁 Select Multiple Images</label>
+            <input type="file" id="batchFiles" accept="image/*" multiple>
+          </div>
+          <div class="input-group">
+            <label>Width: <span class="range-value" id="batchWidthValue">800</span>px</label>
+            <input type="range" id="batchWidth" min="100" max="4000" value="800"
+                   oninput="document.getElementById('batchWidthValue').textContent = this.value">
+          </div>
+          <div class="input-group">
+            <label>Height: <span class="range-value" id="batchHeightValue">600</span>px</label>
+            <input type="range" id="batchHeight" min="100" max="4000" value="600"
+                   oninput="document.getElementById('batchHeightValue').textContent = this.value">
+          </div>
+          <div class="input-group">
+            <label>Quality: <span class="range-value" id="batchQualityValue">0.9</span></label>
+            <input type="range" id="batchQuality" min="0.1" max="1" step="0.1" value="0.9" 
+                   oninput="document.getElementById('batchQualityValue').textContent = this.value">
+          </div>
+          <button onclick="testBatchProcessing()">📦 Process All Images</button>
+        </div>
+
+        <div id="batchProgress" style="display:none; margin-top: 20px;">
+          <div class="info-box">
+            <p id="batchProgressText">⏳ Processing: 0/0</p>
+          </div>
+        </div>
+
+        <div class="batch-results-grid" id="batchResults" style="margin-top: 20px;"></div>
+        <div id="batchError" class="info-box error" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ========================================
+    // PACKAGE FUNCTIONS (INLINE FOR DEMO)
+    // ========================================
+
+    function validateFile(file) {
+      const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/bmp', 'image/gif'];
+      if (!validTypes.includes(file.type)) {
+        return { valid: false, error: `Invalid file type: ${file.type}` };
+      }
+      const maxSize = 10 * 1024 * 1024;
+      if (file.size > maxSize) {
+        return { valid: false, error: `File too large: ${(file.size / 1024 / 1024).toFixed(2)}MB. Max: 10MB` };
+      }
+      return { valid: true };
+    }
+
+    function getImageInfo(file) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        const reader = new FileReader();
+        reader.onloadend = () => { img.src = reader.result; };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+        img.onload = () => {
+          resolve({
+            width: img.width,
+            height: img.height,
+            sizeKB: file.size / 1024,
+            type: file.type
+          });
+        };
+        img.onerror = reject;
+      });
+    }
+
+    function resizeImage(file, options) {
+      const { maxWidth, maxHeight, quality = 0.9, degrees = 0, format = 'image/jpeg' } = options;
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        const reader = new FileReader();
+        reader.onloadend = () => { img.src = reader.result; };
+        reader.onerror = () => reject(new Error('Failed to read file'));
+        reader.readAsDataURL(file);
+        img.onload = () => {
+          try {
+            const widthScale = maxWidth / img.width;
+            const heightScale = maxHeight / img.height;
+            const scale = Math.min(widthScale, heightScale, 1);
+            const newWidth = Math.round(img.width * scale);
+            const newHeight = Math.round(img.height * scale);
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+            if (!ctx) throw new Error('Canvas not available');
+            if (degrees % 180 !== 0) {
+              canvas.width = newHeight;
+              canvas.height = newWidth;
+            } else {
+              canvas.width = newWidth;
+              canvas.height = newHeight;
+            }
+            if (degrees !== 0) {
+              ctx.translate(canvas.width / 2, canvas.height / 2);
+              ctx.rotate((degrees * Math.PI) / 180);
+              ctx.drawImage(img, -newWidth / 2, -newHeight / 2, newWidth, newHeight);
+            } else {
+              ctx.drawImage(img, 0, 0, newWidth, newHeight);
+            }
+            resolve(canvas.toDataURL(format, quality));
+          } catch (error) {
+            reject(error);
+          }
+        };
+        img.onerror = () => reject(new Error('Failed to load image'));
+      });
+    }
+
+    async function resizeToTargetSize(file, targetSizeKB, options) {
+      let quality = 0.9, result = '', sizeKB = 0;
+      const originalSizeKB = file.size / 1024;
+      let minQuality = 0.1, maxQuality = 0.9, iterations = 0;
+      const maxIterations = 10;
+      while (iterations < maxIterations && Math.abs(sizeKB - targetSizeKB) > targetSizeKB * 0.05) {
+        quality = (minQuality + maxQuality) / 2;
+        result = await resizeImage(file, { ...options, quality });
+        sizeKB = ((result.length * 0.75) / 1024);
+        if (sizeKB > targetSizeKB) maxQuality = quality;
+        else minQuality = quality;
+        iterations++;
+      }
+      return { dataUrl: result, sizeKB, compressionRatio: originalSizeKB / sizeKB };
+    }
+
+    function getDataUrlSizeKB(dataUrl) {
+      return ((dataUrl.length * 0.75) / 1024).toFixed(2);
+    }
+
+    // ========================================
+    // UI FUNCTIONS
+    // ========================================
+
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById(tabName).classList.add('active');
+    }
+
+    function showLoading(id) { document.getElementById(id).style.display = 'block'; }
+    function hideLoading(id) { document.getElementById(id).style.display = 'none'; }
+    function showError(id, message) {
+      const errorDiv = document.getElementById(id);
+      errorDiv.textContent = '❌ ' + message;
+      errorDiv.style.display = 'block';
+    }
+    function hideError(id) { document.getElementById(id).style.display = 'none'; }
+
+    function downloadImage(imgId, filename) {
+      const img = document.getElementById(imgId);
+      const link = document.createElement('a');
+      link.href = img.src;
+      link.download = filename;
+      link.click();
+    }
+
+    function downloadImageData(dataUrl, originalName) {
+      const link = document.createElement('a');
+      link.href = dataUrl;
+      link.download = 'processed-' + originalName;
+      link.click();
+    }
+
+    // ========================================
+    // TAB 1: BASIC RESIZE
+    // ========================================
+
+    async function testBasicResize() {
+      const fileInput = document.getElementById('basicFile');
+      const file = fileInput.files[0];
+      if (!file) { showError('basicError', 'Please select an image file'); return; }
+      hideError('basicError');
+      showLoading('basicLoading');
+      try {
+        const validation = validateFile(file);
+        if (!validation.valid) throw new Error(validation.error);
+        const originalInfo = await getImageInfo(file);
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          document.getElementById('basicOriginal').src = e.target.result;
+          document.getElementById('basicOriginal').style.display = 'block';
+          document.getElementById('basicOriginalInfo').innerHTML = `
+            <p><strong>📏 Dimensions:</strong> ${originalInfo.width} x ${originalInfo.height} px</p>
+            <p><strong>📦 Size:</strong> ${originalInfo.sizeKB.toFixed(2)} KB</p>
+            <p><strong>🎨 Type:</strong> ${originalInfo.type}</p>
+          `;
+          document.getElementById('basicOriginalInfo').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+        const maxWidth = parseInt(document.getElementById('basicWidth').value);
+        const maxHeight = parseInt(document.getElementById('basicHeight').value);
+        const quality = parseFloat(document.getElementById('basicQuality').value);
+        const resized = await resizeImage(file, { maxWidth, maxHeight, quality });
+        document.getElementById('basicResult').src = resized;
+        document.getElementById('basicResult').style.display = 'block';
+        const resultSize = getDataUrlSizeKB(resized);
+        const compression = (originalInfo.sizeKB / resultSize).toFixed(2);
+        const saved = ((1 - resultSize / originalInfo.sizeKB) * 100).toFixed(1);
+        document.getElementById('basicResultInfo').innerHTML = `
+          <p><strong>📦 Size:</strong> ${resultSize} KB</p>
+          <p><strong>🗜️ Compression:</strong> ${compression}x smaller</p>
+          <p><strong>💾 Saved:</strong> ${saved}%</p>
+          <p><strong>⚡ Quality:</strong> ${quality}</p>
+        `;
+        document.getElementById('basicResultInfo').style.display = 'block';
+        document.getElementById('basicDownload').style.display = 'block';
+        hideLoading('basicLoading');
+      } catch (error) {
+        hideLoading('basicLoading');
+        showError('basicError', error.message);
+      }
+    }
+
+    // ========================================
+    // TAB 2: ROTATION
+    // ========================================
+
+    async function testRotation() {
+      const fileInput = document.getElementById('rotateFile');
+      const file = fileInput.files[0];
+      if (!file) { showError('rotateError', 'Please select an image file'); return; }
+      hideError('rotateError');
+      showLoading('rotateLoading');
+      try {
+        const validation = validateFile(file);
+        if (!validation.valid) throw new Error(validation.error);
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          document.getElementById('rotateOriginal').src = e.target.result;
+          document.getElementById('rotateOriginal').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+        const degrees = parseInt(document.getElementById('rotateDegrees').value);
+        const maxWidth = parseInt(document.getElementById('rotateWidth').value);
+        const maxHeight = parseInt(document.getElementById('rotateHeight').value);
+        const rotated = await resizeImage(file, { maxWidth, maxHeight, degrees, quality: 0.9 });
+        document.getElementById('rotateResult').src = rotated;
+        document.getElementById('rotateResult').style.display = 'block';
+        document.getElementById('rotateResultInfo').innerHTML = `
+          <p><strong>🔄 Rotation:</strong> ${degrees}°</p>
+          <p><strong>📦 Size:</strong> ${getDataUrlSizeKB(rotated)} KB</p>
+        `;
+        document.getElementById('rotateResultInfo').style.display = 'block';
+        document.getElementById('rotateDownload').style.display = 'block';
+        hideLoading('rotateLoading');
+      } catch (error) {
+        hideLoading('rotateLoading');
+        showError('rotateError', error.message);
+      }
+    }
+
+    function quickRotate(degrees) {
+      document.getElementById('rotateDegrees').value = degrees;
+      document.getElementById('rotateDegreesValue').textContent = degrees;
+      testRotation();
+    }
+
+    // ========================================
+    // TAB 3: COMPRESSION
+    // ========================================
+
+    async function testCompression() {
+      const fileInput = document.getElementById('compressFile');
+      const file = fileInput.files[0];
+      if (!file) { showError('compressError', 'Please select an image file'); return; }
+      hideError('compressError');
+      showLoading('compressLoading');
+      try {
+        const validation = validateFile(file);
+        if (!validation.valid) throw new Error(validation.error);
+        const originalInfo = await getImageInfo(file);
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          document.getElementById('compressOriginal').src = e.target.result;
+          document.getElementById('compressOriginal').style.display = 'block';
+          document.getElementById('compressOriginalInfo').innerHTML = `
+            <p><strong>📦 Original Size:</strong> ${originalInfo.sizeKB.toFixed(2)} KB</p>
+          `;
+          document.getElementById('compressOriginalInfo').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+        const targetSize = parseInt(document.getElementById('targetSize').value);
+        const maxWidth = parseInt(document.getElementById('compressWidth').value);
+        const maxHeight = parseInt(document.getElementById('compressHeight').value);
+        const result = await resizeToTargetSize(file, targetSize, { maxWidth, maxHeight, format: 'image/jpeg' });
+        document.getElementById('compressResult').src = result.dataUrl;
+        document.getElementById('compressResult').style.display = 'block';
+        const saved = ((1 - result.sizeKB / originalInfo.sizeKB) * 100).toFixed(1);
+        document.getElementById('compressResultInfo').innerHTML = `
+          <p><strong>🎯 Target:</strong> ${targetSize} KB</p>
+          <p><strong>✅ Achieved:</strong> ${result.sizeKB.toFixed(2)} KB</p>
+          <p><strong>🗜️ Ratio:</strong> ${result.compressionRatio.toFixed(2)}x</p>
+          <p><strong>💾 Saved:</strong> ${(originalInfo.sizeKB - result.sizeKB).toFixed(2)} KB (${saved}%)</p>
+        `;
+        document.getElementById('compressResultInfo').style.display = 'block';
+        document.getElementById('compressDownload').style.display = 'block';
+        hideLoading('compressLoading');
+      } catch (error) {
+        hideLoading('compressLoading');
+        showError('compressError', error.message);
+      }
+    }
+
+    // ========================================
+    // TAB 4: FORMAT CONVERSION
+    // ========================================
+
+    async function testFormatConversion() {
+      const fileInput = document.getElementById('formatFile');
+      const file = fileInput.files[0];
+      if (!file) { showError('formatError', 'Please select an image file'); return; }
+      hideError('formatError');
+      showLoading('formatLoading');
+      try {
+        const validation = validateFile(file);
+        if (!validation.valid) throw new Error(validation.error);
+        const originalInfo = await getImageInfo(file);
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          document.getElementById('formatOriginal').src = e.target.result;
+          document.getElementById('formatOriginal').style.display = 'block';
+          document.getElementById('formatOriginalInfo').innerHTML = `
+            <p><strong>🎨 Format:</strong> ${originalInfo.type}</p>
+            <p><strong>📦 Size:</strong> ${originalInfo.sizeKB.toFixed(2)} KB</p>
+          `;
+          document.getElementById('formatOriginalInfo').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+        const format = document.getElementById('outputFormat').value;
+        const maxWidth = parseInt(document.getElementById('formatWidth').value);
+        const maxHeight = parseInt(document.getElementById('formatHeight').value);
+        const quality = parseFloat(document.getElementById('formatQuality').value);
+        const converted = await resizeImage(file, { maxWidth, maxHeight, quality, format });
+        document.getElementById('formatResult').src = converted;
+        document.getElementById('formatResult').style.display = 'block';
+        const resultSize = getDataUrlSizeKB(converted);
+        const formatName = format.split('/')[1].toUpperCase();
+        const diff = (originalInfo.sizeKB - resultSize).toFixed(2);
+        const diffPercent = ((diff / originalInfo.sizeKB) * 100).toFixed(1);
+        document.getElementById('formatResultInfo').innerHTML = `
+          <p><strong>🎨 Output:</strong> ${formatName}</p>
+          <p><strong>📦 Size:</strong> ${resultSize} KB</p>
+          <p><strong>⚡ Quality:</strong> ${quality}</p>
+          <p><strong>💾 ${diff > 0 ? 'Saved' : 'Increased'}:</strong> ${Math.abs(diff)} KB (${Math.abs(diffPercent)}%)</p>
+        `;
+        document.getElementById('formatResultInfo').style.display = 'block';
+        document.getElementById('formatDownload').style.display = 'block';
+        hideLoading('formatLoading');
+      } catch (error) {
+        hideLoading('formatLoading');
+        showError('formatError', error.message);
+      }
+    }
+
+    // ========================================
+    // TAB 5: BATCH PROCESSING
+    // ========================================
+
+    async function testBatchProcessing() {
+      const fileInput = document.getElementById('batchFiles');
+      const files = Array.from(fileInput.files);
+      if (files.length === 0) { showError('batchError', 'Please select at least one image'); return; }
+      hideError('batchError');
+      document.getElementById('batchResults').innerHTML = '';
+      document.getElementById('batchProgress').style.display = 'block';
+      const maxWidth = parseInt(document.getElementById('batchWidth').value);
+      const maxHeight = parseInt(document.getElementById('batchHeight').value);
+      const quality = parseFloat(document.getElementById('batchQuality').value);
+      try {
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i];
+          document.getElementById('batchProgressText').textContent = 
+            `⏳ Processing: ${i + 1}/${files.length} - ${file.name}`;
+          const validation = validateFile(file);
+          if (!validation.valid) {
+            console.error(`Skipping ${file.name}: ${validation.error}`);
+            continue;
+          }
+          const resized = await resizeImage(file, { maxWidth, maxHeight, quality });
+          const resultBox = document.createElement('div');
+          resultBox.className = 'preview-box';
+          resultBox.innerHTML = `
+            <h4 style="font-size: 0.9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${file.name}">📷 ${file.name}</h4>
+            <img src="${resized}" style="display:block;" alt="${file.name}">
+            <div class="info-box">
+              <p><strong>Size:</strong> ${getDataUrlSizeKB(resized)} KB</p>
+            </div>
+            <button class="download-btn" onclick="downloadImageData('${resized}', '${file.name}')">⬇️ Download</button>
+          `;
+          document.getElementById('batchResults').appendChild(resultBox);
+        }
+        document.getElementById('batchProgress').style.display = 'none';
+      } catch (error) {
+        showError('batchError', error.message);
+        document.getElementById('batchProgress').style.display = 'none';
+      }
+    }
+
+    console.log('✅ Demo loaded successfully');
+  </script>
+</body>
+</html>

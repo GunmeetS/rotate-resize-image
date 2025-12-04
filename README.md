@@ -39,6 +39,11 @@ yarn add rotate-resize-image
 pnpm
 pnpm add rotate-resize-image
 
+## 🎮 Interactive Demo
+
+Try all features in our interactive demo:
+
+**[Launch Demo →](https://GunmeetS.github.io/rotate-resize-image/demo.html)**
 
 ## 🚀 Quick Start
 
@@ -448,8 +453,8 @@ See [LICENSE](LICENSE) for more information.
 ## 👨‍💻 Author
 
 **Your Name**
-- GitHub: [@yourusername](https://github.com/GunmeetS)
-- Twitter: [@yourtwitter](https://twitter.com/GunmeetS)
+- GitHub: [@GunmeetS](https://github.com/GunmeetS)
+- Twitter: [@GunmeetS](https://twitter.com/GunmeetS44)
 
 ## 🙏 Acknowledgments
 

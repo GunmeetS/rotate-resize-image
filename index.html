@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>rotate-resize-image - Demos</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      background: white;
+      border-radius: 12px;
+      padding: 50px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    p {
+      font-size: 1.2rem;
+      color: #666;
+      margin-bottom: 40px;
+      line-height: 1.6;
+    }
+
+    .links {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    a {
+      display: inline-block;
+      padding: 15px 30px;
+      background: #667eea;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    a:hover {
+      background: #5568d3;
+      transform: translateY(-2px);
+    }
+
+    .github-link {
+      background: #333;
+    }
+
+    .github-link:hover {
+      background: #000;
+    }
+
+    .npm-link {
+      background: #cb3837;
+    }
+
+    .npm-link:hover {
+      background: #a02d2a;
+    }
+
+    .features {
+      margin-top: 40px;
+      text-align: left;
+      background: #f9f9f9;
+      padding: 30px;
+      border-radius: 8px;
+    }
+
+    .features h2 {
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    .features ul {
+      list-style: none;
+    }
+
+    .features li {
+      padding: 8px 0;
+      color: #555;
+    }
+
+    .features li:before {
+      content: "✓ ";
+      color: #28a745;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+    code {
+      background: #e8e8e8;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔄 rotate-resize-image</h1>
+    <p>
+      Lightweight, fast, and powerful client-side image processing library.<br>
+      Rotate, resize, and compress images in the browser with zero dependencies.
+    </p>
+
+    <div class="links">
+      <a href="demo.html">🎮 Interactive Demo</a>
+      <a href="examples.html">📝 Code Examples</a>
+      <a href="https://github.com/GunmeetS/rotate-resize-image" class="github-link" target="_blank">⭐ GitHub</a>
+      <a href="https://www.npmjs.com/package/rotate-resize-image" class="npm-link" target="_blank">📦 npm</a>
+    </div>
+
+    <div class="features">
+      <h2>Features</h2>
+      <ul>
+        <li>Smart resizing with aspect ratio preservation</li>
+        <li>Image rotation by any degree (90°, 180°, 270°, etc.)</li>
+        <li>Target file size compression</li>
+        <li>Format conversion (JPEG, PNG, WebP)</li>
+        <li>Batch processing support</li>
+        <li>File validation</li>
+        <li>Zero dependencies (~3KB gzipped)</li>
+        <li>Full TypeScript support</li>
+      </ul>
+    </div>
+
+    <div style="margin-top: 30px; padding: 20px; background: #f0f0f0; border-radius: 8px;">
+      <h3 style="margin-bottom: 10px; color: #333;">Installation</h3>
+      <code>npm install rotate-resize-image</code>
+    </div>
+  </div>
+</body>
+</html>
